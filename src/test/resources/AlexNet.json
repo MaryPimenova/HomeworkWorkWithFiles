@@ -1,0 +1,20 @@
+{
+  "name": "AlexNet",
+  "architecture": "convolutional neural network",
+  "year": 2012,
+  "authors": ["Krizhevsky", "Sutskever", "Hinton"],
+  "aim": "image recognition",
+  "isNonlinear": true,
+  "dropoutUsage": true,
+  "imageResolution": "256x256",
+  "convolutionalLayersNumber": 5,
+  "fullyConnectedLayersNumber": 3,
+  "parametersNumber": 6230000,
+  "activationFunction": "ReLU",
+  "epochs": 90,
+  "dataset": {
+    "trainingSetSize": 1200000,
+    "testingSetSize": 150000,
+    "validationSetSize": 50000
+  }
+}

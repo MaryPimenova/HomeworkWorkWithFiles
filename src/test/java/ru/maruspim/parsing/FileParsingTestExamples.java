@@ -2,9 +2,12 @@ package ru.maruspim.parsing;
 
 import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.opencsv.CSVReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.maruspim.modal.Human;
 
 import java.io.File;
 import java.io.InputStream;
@@ -16,9 +19,9 @@ import java.util.zip.ZipInputStream;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class FileParsingTest {
+public class FileParsingTestExamples {
 
-    private ClassLoader cl = FileParsingTest.class.getClassLoader(); // получение информации о classLoader
+    private ClassLoader cl = FileParsingTestExamples.class.getClassLoader(); // получение информации о classLoader
 
     @Test
     void pdfParseTest() throws Exception {
@@ -26,7 +29,6 @@ public class FileParsingTest {
         open("https://junit.org/junit5/docs/current/user-guide/");
         File download = $("a[href*='junit-user-guide-5.9.3.pdf']").download();
         PDF pdf = new PDF(download);
-        System.out.println();
         Assertions.assertEquals(
                 "Stefan Bechtold, Sam Brannen, Johannes Link, Matthias Merdes, Marc Philipp, Juliette de Rancourt, Christian Stein",
                 pdf.author);
@@ -70,6 +72,22 @@ public class FileParsingTest {
 
     @Test
     void jsonTest() throws Exception {
-
+        Gson gson = new Gson();
+        try (InputStream is = cl.getResourceAsStream("human.json");
+             InputStreamReader isr = new InputStreamReader(is)) {
+            JsonObject jsonObject = gson.fromJson(isr, JsonObject.class);
+            Assertions.assertTrue(jsonObject.get("isClever").getAsBoolean());
+            Assertions.assertEquals(33, jsonObject.get("age").getAsInt());
+        }
+    }
+    @Test
+    void jsonCleverTest() throws Exception {
+        Gson gson = new Gson();
+        try (InputStream is = cl.getResourceAsStream("human.json");
+             InputStreamReader isr = new InputStreamReader(is)) {
+            Human human = gson.fromJson(isr, Human.class);
+            Assertions.assertTrue(human.isClever);
+            Assertions.assertEquals(33, human.age);
+        }
     }
 }
